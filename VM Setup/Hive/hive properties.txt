@@ -1,0 +1,9 @@
+hive> set hive.cli.print.header=true;
+
+$ hive -S
+hive> set hive.cli.print.header=true;
+hive> select * from dual;
+
+### surrogate keys
+1) select *,(row_number() over())+12345 as surro_key from t1; 
+

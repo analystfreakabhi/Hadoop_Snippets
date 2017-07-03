@@ -1,0 +1,21 @@
+
+Create cust  function : 
+[abhidocs@iop-bi-master custom_py]$ cat function.py
+import sys
+for line in sys.stdin:
+        (firstname,lastname)=line.split('\t')
+        if len(firstname)>len(lastname):
+                print "TRUE"
+
+###testing				
+ hive -e "select name, employee_id from hive_tasks.employee_id" > emp.dat
+	
+cat emp.dat | python function.py
+
+
+hive> add file /mnt/home/abhidocs/custom_py/function.py;
+Added resources: [/mnt/home/abhidocs/custom_py/function.py]
+-- Added file to distributed cache.
+
+ select transform(name, employee_id) using 'python function.py' as islonger from employee_id;
+	

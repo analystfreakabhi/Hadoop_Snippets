@@ -1,0 +1,39 @@
+## check status
+oozie admin -oozie http://localhost:11000/oozie -status
+
+##check oozie propeties
+/etc/oozie/conf --> oozie-site.xml
+http://sandbox.hortonworks.com:11000/oozie
+
+## before running OOZIE 
+## 1) keep all the files in local dir
+## 2) create dir in HDFS same as oozie.wf.application.path ( job.prop file)
+## 3) copy files to above dir
+## 4) 
+
+[root@sandbox pig_demo]# oozie job -oozie http://localhost:11000/oozie -config job.properties -run
+job: 0000000-160921234731289-oozie-oozi-W
+[root@sandbox pig_demo]# oozie job -oozie http://localhost:11000/oozie -info 0000000-160921234731289-oozie-oozi-W
+Job ID : 0000000-160921234731289-oozie-oozi-W
+------------------------------------------------------------------------------------------------------------------------------------
+Workflow Name : pig-wf
+App Path      : hdfs://sandbox.hortonworks.com:8020/user/root/pig_demo
+Status        : RUNNING
+Run           : 0
+User          : root
+Group         : -
+Created       : 2016-09-22 04:39 GMT
+Started       : 2016-09-22 04:39 GMT
+Last Modified : 2016-09-22 04:39 GMT
+Ended         : -
+CoordAction ID: -
+
+Actions
+------------------------------------------------------------------------------------------------------------------------------------
+ID                                                                            Status    Ext ID                 Ext Status Err Code
+------------------------------------------------------------------------------------------------------------------------------------
+0000000-160921234731289-oozie-oozi-W@:start:                                  OK        -                      OK         -
+------------------------------------------------------------------------------------------------------------------------------------
+0000000-160921234731289-oozie-oozi-W@pig-demo                                 RUNNING   job_1474501691373_0004 RUNNING    -
+------------------------------------------------------------------------------------------------------------------------------------
+

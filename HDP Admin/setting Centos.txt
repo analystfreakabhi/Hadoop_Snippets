@@ -1,0 +1,89 @@
+ifconfig -a
+cd /etc/sysconfig
+vi network
+-- add vmware vmnet8 gateway as extra line:
+		GATEWAY=<>
+-- go to /etc/sysconfig/network-scripts
+--ifconfig
+	vi ifcfg-eth0
+		DEVICE=eth0
+		BOOTPROTO=static
+		IPADDR=<vmnet.10>
+		NETMASK=255.255.255.0
+service network restart
+ifconfig << check inet addre>.
+
+ping inet		
+
+---------------------
+##edit hosts file
+vi /etc/hosts
+echo "192.168.81.2       centOs66" >> /etc/hosts
+ping centOs66
+
+###### setup internet conn
+[root@localhost ~]# ping www.google.com
+ping: unknown host www.google.com
+[root@localhost ~]# ls -ltr /etc/resolv.conf
+-rw-r--r--. 1 root root 0 Sep 24 14:01 /etc/resolv.conf
+[root@localhost ~]# vi /etc/resolv.conf
+[root@localhost ~]# echo "nameserver 192.168.81.2" >> /etc/resolv.conf
+[root@localhost ~]# cat /etc/resolv.conf
+nameserver 192.168.81.2
+---------------------
+ls -ltr /etc/yum-repos.d
+yum -y install 
+ yum install wget open-ssh perl java-1.7.0-openjdk
+[root@localhost ~]# yum -y install ntp
+[root@localhost ~]# service ntpd start
+Starting ntpd:                                             [  OK  ]
+[root@localhost ~]# service ntpd status
+ntpd (pid  1433) is running...
+[root@localhost ~]# chkconfig --list ntpd
+
+----------------
+init 6 for restart
+edit /etc/hosts
+inetIP <<hostname>>
+
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - SELinux security policy is enforced.
+#     permissive - SELinux prints warnings instead of enforcing.
+#     disabled - No SELinux policy is loaded.
+#SELINUX=enforcing
+SELINUX=disabled
+# SELINUXTYPE= can take one of these two values:
+#     targeted - Targeted processes are protected,
+#     mls - Multi Level Security protection.
+SELINUXTYPE=targeted
+--------------
+[root@centostemplate selinux]# service iptables status
+iptables: Firewall is not running.
+[root@centostemplate selinux]# chconfig --list iptables
+-bash: chconfig: command not found
+[root@centostemplate selinux]# chkconfig --list iptables
+iptables        0:off   1:off   2:on    3:on    4:on    5:on    6:off
+[root@centostemplate selinux]# chkconfig iptables off
+[root@centostemplate selinux]# chkconfig --list iptables
+iptables        0:off   1:off   2:off   3:off   4:off   5:off   6:off
+
+##### naming VM
+[root@centostemplate ~]# cat /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=localhost.localdomain
+GATEWAY=192.168.81.2
+
+NETWORKING=yes
+HOSTNAME=centostemplage.hguy.com
+GATEWAY=192.168.81.2
+
+[root@centostemplate ~]# cat /etc/hosts
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+192.168.81.10  centostemplage.hguy.com centOstemplate
+
+	
+##
+

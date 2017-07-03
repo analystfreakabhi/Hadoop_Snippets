@@ -1,0 +1,27 @@
+<workflow-app name='pig-wf' xmlns="uri:oozie:workflow:0.3">
+    <start to='pig-demo'/>
+    <action name='pig-demo'>
+       <pig>
+            <job-tracker>${resourceManager}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <prepare> <delete path="${outputDir}"/></prepare>
+            <configuration>
+                <property>
+                    <name>mapred.compress.map.output</name>
+                    <value>true</value>
+                </property>
+            </configuration>
+            <script>store_sales.pig</script>
+            <argument>-param</argument>
+            <argument>INPUT=${inputDir}</argument>
+            <argument>-param</argument>
+            <argument>OUTPUT=${outputDir}</argument>			
+       </pig>
+       <ok to="end"/>
+           <error to="fail"/>
+        </action>
+        <kill name="fail">
+             <message>Pig failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+        </kill>
+        <end name="end"/>
+</workflow-app>

@@ -1,0 +1,20 @@
+### great link for all command referencce : https://www.codementor.io/git/tutorial/git-cheatsheet
+
+git init 
+git status -
+git add <files>
+git commit -m "comment"
+git remote add origin https://github.com/freakabhi/hadoop.git
+git push -u origin master
+
+
+git reset HEAD~ 
+
+git remote add origin  https://github.com/freakabhi/hadoop_snippets.git
+
+
+ git pull https://github.com/freakabhi/hadoop_snippets.git
+ 
+ to remove file from commimted :
+ git rm -cached "filename"
+ git commit --amend

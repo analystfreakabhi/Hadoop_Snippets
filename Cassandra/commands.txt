@@ -1,0 +1,115 @@
+java -version
+cd cassandra/apache-cassandra-2.0.7/
+bin/nodetool status
+   50  bin/nodetool info -h 127.0.0.1 
+   51  bin/nodetool ring
+   52  cd /var/log/cassandra/
+   54  more system.log 
+   
+***********************************************************   
+vm1@ubuntu:~/cassandra/apache-cassandra-2.0.7$ bin/cqlsh
+
+cqlsh> DESCRIBE CLUSTER;
+
+Cluster: Test Cluster
+Partitioner: Murmur3Partitioner
+Snitch: SimpleSnitch
+
+cqlsh> DESCRIBE KEYSPACES; ## show databases
+   cqlsh> describe keyspace system;
+cqlsh> create keyspace vehicle_tracker with replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+cqlsh> DESCRIBE KEYSPACES;
+DROP KEYSPACE vehicle_tracker;
+cqlsh> DROP KEYSPACE vehicle_tracker ;
+
+cqlsh:customer_base> create table activity (
+                 ... home_id text,
+                 ... datetime timestamp,
+                 ... event text,
+                 ... code_used text,
+                 ... PRIMARY KEY (home_id, datetime) ## first field becomes partition
+                 ... ) with CLUSTERING ORDER BY (datetime desc);
+
+cqlsh:customer_base> create  table home(
+                 ... home_id text,
+                 ... address text,
+                 ... city text,
+                 ... state text,
+                 ... zip text,
+                 ... contact_number text,
+                 ... phone text,
+                 ... alt_phone text,
+                 ... email text,
+                 ... main_code text,
+                 ... guest_code text,
+                 ... PRIMARY KEY(home_id )
+                 ... ) ;
+cqlsh:customer_base> DESCRIBE TABLE home ;
+
+CREATE TABLE home (
+  home_id text,
+  address text,
+  alt_phone text,
+  city text,
+  contact_number text,
+  email text,
+  guest_code text,
+  main_code text,
+  phone text,
+  state text,
+  zip text,
+  PRIMARY KEY (home_id)
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+***********************************
+
+cqlsh:customer_base> insert INTO activity (home_id, datetime , code_used , event ) VALUES ( 'H13222','2016-03-22 12:34:00','alarm was set','4455');
+
+cqlsh:customer_base> COPY activity (home_id , datetime , event , code_used ) 
+                 ... FROM '/home/vm1/Desktop/Files/Chapter 7/events.csv'
+                 ... WITH header = true and Delimiter = '|'
+                 ... 
+                 ... ;
+
+---------------
+bin/cassandra-cli ## thrift interface
+use customer_base
+list activity ## partition wise 
+				 
+				 ------------------------------
+bin/nodetool flush customer_base  ## flush memcache to disk /var/lib/cassandra/data/				 
+bin/sstable2json /var/lib/cassandra/data/customer_base/activity/customer_base-activity-jdb2.
+
+## secondary index
+cqlsh:customer_base> CREATE INDEX code_used_idx ON activity (code_used) ;
+
+## WHEN DELETES/UPDATES HAPPEN NEW FILES ARE CREATED IN /VAR/LIB/ and new files are created for SStables;
+## to compact these files need to run Compact utility
+
+vm1@ubuntu:~/cassandra/apache-cassandra-2.0.7$ bin/nodetool compact playground 
+vm1@ubuntu:~/cassandra/apache-cassandra-2.0.7$ bin/nodetool compact playground messages_by_user
+
+##TTL time to live
+insert into table... TTL 30; record will be there for 30 seconds.
+
+## update table using TTL  500... 
+###################### HARDWARE recommandation 
+
+http://www.datastax.com/wp-content/uploads/2014/01/WP-DataStax-Enterprise-Reference-Architecture.pdf
+
+https://aws.amazon.com/ec2/instance-types/
+https://cloud.google.com/products/

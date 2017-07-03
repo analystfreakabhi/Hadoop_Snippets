@@ -1,0 +1,9 @@
+resetting password for ambari:
+https://community.hortonworks.com/questions/15063/default-usernamepassword-for-ambari.html
+
+Adding NIFI ( HDP 2.5)
+admin
+simran#123
+
+
+Dontchangemypassword#123

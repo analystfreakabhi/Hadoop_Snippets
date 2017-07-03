@@ -1,0 +1,4 @@
+http://www.ithinkcloud.com/tutorials/tutorial-on-how-to-install-apache-spark-on-windows/
+
+ipython on HDP sandbox
+http://stackoverflow.com/questions/28360430/how-to-update-python-2-7-in-hdp-2-2-using-with-spark-and-python

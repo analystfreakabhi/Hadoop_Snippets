@@ -1,0 +1,6 @@
+sqoop import --connect "jdbc:mysql://sandbox.hortonworks.com:3306/sakila" --username=sakila_dba -P --as-parquetfile --table actor --target-dir=/user/root/sakila_actor_pqt/  --outdir java_files --driver com.mysql.jdbc.Driver
+sqoop import-all-tables --connect "jdbc:mysql://sandbox.hortonworks.com:3306/sakila" --username=sakila_dba -P --as-parquetfile --warehouse-dir=/user/root/sakila_parquet/  --outdir java_files --driver com.mysql.jdbc.Driver
+--as-avrodatafile
+sqoop import-all-tables --connect "jdbc:mysql://sandbox.hortonworks.com:3306/sakila" --username=sakila_dba -P --as-parquetfile --warehouse-dir=/user/root/sakila_parquet/  --outdir java_files
+
+sqoop eval --connect "jdbc:mysql://sandbox.hortonworks.com:3306/sakila" --username=sakila_dba -P --query "select count(1) from actor"

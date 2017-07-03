@@ -1,0 +1,6 @@
+## Setup winscp with Notepad ++ 
+https://winscp.net/eng/docs/integration_editor#notepad
+
+
+good Git for examples :
+https://github.com/freakabhi/HiveEssentials

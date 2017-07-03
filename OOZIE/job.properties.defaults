@@ -1,0 +1,26 @@
+
+script_name_external = hdfs_path_of_script/external.hive
+script_name_orc=hdfs_path_of_script/orc.hive
+script_name_copy=hdfs_path_of_script/Copydata.hive
+database = database_name
+
+
+/etc/hadoop/conf/core-site.xml
+/etc/hadoop/conf/yarn-site.xml
+
+nameNode=hdfs://ip-10-146-23-45.ec2.internal:8020
+jobTracker=ip-10-146-23-45.ec2.internal:8032
+master=yarn-cluster
+queueName=default
+examplesRoot=examples
+oozie.use.system.libpath=true
+oozie.wf.application.path=${nameNode}/user/${user.name}/${examplesRoot}/apps/spark
+
+
+####proprties
+nameNode=hdfs://sandbox.hortonworks.com:8020
+resourceManager=sandbox.hortonworks.com:8050
+inputDir=/user/${user.name}/sqoop_import/orders/
+outputDir=/user/${user.name}/pig_demp/orders
+oozie.use.system.libpath=true
+oozie.wf.application.path=${nameNode}/user/${user.name}/pig_demo
