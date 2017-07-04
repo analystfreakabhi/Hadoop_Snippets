@@ -76,3 +76,6 @@ SELECT * FROM reconcile_view;
 DROP TABLE actor_base;
 CREATE TABLE actor_base AS
 SELECT * FROM reporting_actor;
+
+
+(sqoop eval --connect "jdbc:mysql://sandbox.hortonworks.com:3306/sakila" --username=sakila_dba --password=hadoop --query "select max(last_update) from actor_base")
