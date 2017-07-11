@@ -41,11 +41,31 @@ $ docker-machine ip
 
    ```shell
    docker-machine rm default
-   docker-machine create -d virtualbox --virtualbox-memory=4096 --virtualbox-cpu-count=2 default
+   docker-machine create -d virtualbox --virtualbox-memory=6000 --virtualbox-cpu-count=2 default
    ```
 
    6. for docker-kafka container can be found in below : 
 
       https://github.com/Landoop/fast-data-dev
 
-   7. ​
+   7. **for windows run below :** 
+
+```shell
+# Docker for Mac >= 1.12, Linux, Docker for Windows 10
+docker run --rm -it \
+           -p 2181:2181 -p 3030:3030 -p 8081:8081 \
+           -p 8082:8082 -p 8083:8083 -p 9092:9092 \
+           -e ADV_HOST=127.0.0.1 \
+           landoop/fast-data-dev
+
+# Docker toolbox
+docker run --rm -it \
+          -p 2181:2181 -p 3030:3030 -p 8081:8081 \
+          -p 8082:8082 -p 8083:8083 -p 9092:9092 \
+          -e ADV_HOST=192.168.99.100 \
+          landoop/fast-data-dev
+
+# Kafka command lines tools
+docker run --rm -it --net=host landoop/fast-data-dev bash
+
+```
