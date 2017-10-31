@@ -1,0 +1,27 @@
+oozie.use.system.libpath=True
+security_enabled=False
+dryrun=False
+nameNode=hdfs://quickstart.cloudera:8020
+table_name=abc12
+jobTracker=localhost:8032
+
+
+<workflow-app name="hive_scripts" xmlns="uri:oozie:workflow:0.5">
+    <start to="hive2-375a"/>
+    <kill name="Kill">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+    </kill>
+    <action name="hive2-375a" cred="hive2">
+        <hive2 xmlns="uri:oozie:hive2-action:0.1">
+            <job-tracker>${jobTracker}</job-tracker>
+            <name-node>${nameNode}</name-node>
+            <jdbc-url>jdbc:hive2://quickstart.cloudera:10000/default</jdbc-url>
+            <script>/user/cloudera/oozie_examples/hive/create_tbl.hql</script>
+              <param>table_name=${table_name}</param>
+        </hive2>
+        <ok to="End"/>
+        <error to="Kill"/>
+    </action>
+    <end name="End"/>
+</workflow-app>
+
